@@ -16,6 +16,11 @@
   background: linear-gradient(180deg, rgba(26,67,144,1) 0%, rgba(48,106,216,1) 100%);
   font-family: 'Nunito';
   font-size: 400;
+  color:#fff;
+}
+
+.row{
+  color:#fff;
 }
 
 #timezone{
@@ -36,16 +41,17 @@
   left:20px;
   top:255px;
   position: absolute;
-  color:#fff;
   font-size: 18px;
+  color:#fff;
 }
 
 #sunset{
   right:20px;
   top:255px;
   position: absolute;
-  color:#fff;
   font-size: 18px;
+  text-align: right;
+  color:#fff;
 }
 
 #terrain{
@@ -82,7 +88,6 @@ input[type=text]{
   width: 250px;
 	outline:none;
   background-color: #12316b;
-  color:#fff;
   margin-left: 10px;
   line-height: 40px;
   border-radius: 20px;
@@ -101,14 +106,18 @@ button[type=submit]{
 
 button[type=submit] i{
   font-size: 20px;
-  color:#fff;
   line-height: 40px;
 }
 
 #country{
   text-align: center;
-  color:#fff;
   font-size: 50px;
+}
+
+#country img{
+  width:60px;
+  height: 50px;
+  margin-bottom: 10px;
 }
 
 .weather{
@@ -121,17 +130,79 @@ button[type=submit] i{
 
 #temp_currently{
   font-size: 45px;
-  color:#fff;
+
 }
 
 #temp_max_min{
   font-size: 20px;
-  color:#fff;
+
 }
 
 #description{
   font-size: 25px;
-  color:#fff;
+
+}
+
+#visibility{
+  background-color: #fff;
+  border-radius: 5px;
+  color:#000;
+  margin-bottom: 15px;
+}
+
+#clouds{
+  background-color: #fff;
+  border-radius: 5px;
+  color:#000;
+}
+
+#wind_speed{
+  background-color: #fff;
+  border-radius: 5px;
+  color:#000;
+  margin-bottom: 15px;
+}
+
+#wind_deg{
+  background-color: #fff;
+  border-radius: 5px;
+  color:#000;
+}
+
+#deg{
+
+}
+
+#pressure{
+  background-color: #fff;
+  border-radius: 5px;
+  color:#000;
+  margin-bottom: 15px;
+}
+
+#humidity{
+  background-color: #fff;
+  border-radius: 5px;
+  color:#000;
+}
+
+#feels{
+  background-color: #fff;
+  border-radius: 5px;
+  color:#000;
+}
+
+#temp_min{
+  background-color: #fff;
+  border-radius: 5px;
+  color:#000;
+  margin-bottom: 15px;
+}
+
+#temp_max{
+  background-color: #fff;
+  border-radius: 5px;
+  color:#000;
 }
 
 .hill-left{

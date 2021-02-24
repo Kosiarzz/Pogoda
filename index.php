@@ -2,8 +2,12 @@
 	//https://api.openweathermap.org/data/2.5/weather?q=Puławy,pl&lang=pl&units=metric&appid=5bf5d70f6b391fe9cb0c6febc330aa36
 	$apiKey = "5bf5d70f6b391fe9cb0c6febc330aa36";
 	$cityId = "Krosno";
+	if($_GET['city']==null){
+		header("location: getcity.php");
+	}
 	$city=$_GET['city'];
 	$language = "pl";
+	$img = 
 	$ApiUrl = "http://api.openweathermap.org/data/2.5/weather?q=" . $city . "&lang=". $language ."&units=metric&APPID=" . $apiKey;
 	
 	$ch = curl_init();
@@ -20,7 +24,7 @@
 	$data = json_decode($response);
 
 	if($data->cod == 404){
-		echo"NIE MA TAKIEGO MIASTA";
+		header("location: error.php");
 	}
 	else
 	{
@@ -29,25 +33,27 @@
 		//#echo $data->main->temp_max;
 		//#echo $data->main->temp_min;
 		//#echo $data->main->temp;
-
 		//echo $data->main->feels_like; odczuwalna temp
-
 		//echo $data->main->pressure; cisnienie
 		//echo $data->main->humidity; wilgotnosc
-
 		//echo $data->wind->speed; wiatr predkosc
 		//echo $data->wind->deg;   wiatr kierunek
-
 		//echo $data->clouds->all; zachmurzenie
 		//echo $data->visibility; widocznosc
-
-
 		//#echo $data->sys->country;
 		//#echo $data->sys->sunrise;
 		//#echo $data->sys->sunset;
 		//#echo $data->name;
+		//$currentTime = time();
+
+		//wybór ikony zależny od dnia/nocy
+		if(str_ends_with($data->weather[0]->icon , "n")){
+			$img = "01n";
+		}else
+		{
+			$img = "01d";
+		}
 	}
-	$currentTime = time();
 
 ?>
 
@@ -68,7 +74,7 @@
 	<body>
 		<div id="content">
 			<div id="timezone">
-				<img src=<?php echo "img/".$data->weather[0]->icon.".png";?> alt="pogoda">
+				<img src=<?php echo "img/".$img.".png";?> alt="pogoda">
 				<div id="ddd">
 					<input type="button" value="day" onClick="day();">
 					<input type="button" value="night" onClick="night();">
@@ -95,25 +101,26 @@
 			<div class="row justify-content-center weather">
 				<div id="temp" class="col-lg-12">
 					<div id="temp_currently"><?php echo $data->main->temp; ?> °C</div>
-					<div id="temp_max_min"><?php echo ceil($data->main->temp_min); ?> °C / <?php echo ceil($data->main->temp_max); ?> °C</div>
+					<div id="temp_max_min">Odczuwalna: <?php echo $data->main->feels_like; ?> °C</div>
 					<div id="description"><?php echo ucwords($data->weather[0]->description); ?></div>
 				</div>
 			</div>
 			<div class="row">
-				<div id="visibility" class="col-lg-3">
-					Widoczność: <?php echo $data->visibility; ?> m
-					Zachmurzenie: <?php echo $data->clouds->all; ?> %
+				<div class="col-lg-3">
+					<div id="visibility">Widoczność: <?php echo $data->visibility; ?> m</div>
+					<div id="clouds">Zachmurzenie: <?php echo $data->clouds->all; ?> %</div>
 				</div>
-				<div id="wind" class="col-lg-3">
-					Prędkość wiatru: <?php echo $data->wind->speed; ?> m/s
-					Kierunek wiatru: <div id="wind2"></div>
+				<div class="col-lg-3">
+					<div id="wind_speed">Prędkość wiatru: <?php echo $data->wind->speed; ?> m/s</div>
+					<div id="wind_deg"><div id="deg"></div><i id="arrow" class="fas fa-arrow-up"></i></div>
 				</div>
-				<div id="pressure" class="col-lg-3">
-					Ciśnienie: <?php echo $data->main->pressure; ?>hPa
-					Wilgotność: <?php echo $data->main->humidity; ?> %
+				<div class="col-lg-3">
+					<div id="pressure">Ciśnienie: <?php echo $data->main->pressure; ?>hPa</div>
+					<div id="humidity">Wilgotność: <?php echo $data->main->humidity; ?> %</div>
 				</div>
-				<div id="feels" class="col-lg-3">
-					Temperatura odczuwalna: <?php echo $data->main->feels_like; ?> °C
+				<div class="col-lg-3">
+				<div id="temp_min">Min: <?php echo ceil($data->main->temp_min); ?> °C</div>
+				<div id="temp_max">Max: <?php echo ceil($data->main->temp_max); ?> °C</div>
 				</div>
 			</div>
 			</div>
@@ -128,19 +135,16 @@
 	<script>
 		var background = document.getElementById("content"); //background weather
 		var terrain = document.getElementById("terrain"); //background weather
-		var wind = document.getElementById("wind2");
-		var time = document.querySelector("#timezone img");
-		time.style.top = "150%";
-		time.style.left = "0.1%";
-
-
+		var wind =  document.getElementById("deg"); //wind direction
+		var arrow =  document.getElementById("arrow"); //wind arrow	
+		var time = document.querySelector("#timezone img");	
 		var sunrise = document.getElementById("sunrise");
 		var sunset = document.getElementById("sunset");
 
-		var times = <?php echo $data->sys->sunrise?>;
-		var timek = <?php echo $data->sys->sunset?>;
+		var times = <?php echo $data->sys->sunrise?>; //czas wchodu słońca
+		var timek = <?php echo $data->sys->sunset?>; //czas zachodu słońca
 
-		function deg(degg){
+		function deg(degg){ //ustawienie kierunku wiatru
 			var direction = "x";
 
 			if(degg>348.75 || degg<=11.25){
@@ -176,49 +180,135 @@
 			}else if(degg>326.25 && degg<= 348.75){
 				direction = "NNW";
 			}
-
-			return direction;
+			arrow.style.transform = "rotate("+degg+"deg)";
+			return "Kierunek wiatru: "+direction;
 		}
 		wind.innerHTML = deg(<?php echo $data->wind->deg; ?>);
 
+			
+			//formatowanie czasu wschodu słońca
+			var date = new Date(times * 1000);
+			var hours = date.getHours();
+			var minutes = "0" + date.getMinutes();
+			var seconds = "0" + date.getSeconds();
+			var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2) + "<br> wschód słońca";
+			sunrise.innerHTML = formattedTime;
+			var day_start = date.getHours()*3600 + date.getMinutes()*60 + date.getSeconds(); //czas wschodu słońca w sekundach
 
+			//formatowanie czasu zachodu słońca
+			var date2 = new Date(timek * 1000);
+			var hours = date2.getHours();
+			var minutes = "0" + date2.getMinutes();
+			var seconds = "0" + date2.getSeconds();
+			var formattedTime2 = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2) + "<br> zachód słońca";
+			sunset.innerHTML = formattedTime2;
+			var day_end = date2.getHours()*3600 + date2.getMinutes()*60 + date2.getSeconds(); //czas zachodu słońca w sekundach
+
+			var seconds_day = (date2.getTime() - date.getTime()) / 1000;  //liczba sekund trwania dnia
+			var seconds_night = 86400 - seconds_day; //liczba sekund trwania nocy
+
+			var now = new Date(); //aktualny czas
+			var now_seconds = now.getHours() * 3600 + now.getMinutes() *60 + now.getSeconds(); //aktualny czas w sekundach
+			//alert("day_start = " + day_start + " day_end="+day_end+" seconds_day =" + seconds_day + "seconds_night ="+seconds_night +"now = " + now);
+			//alert("teraz: " + now.getHours()+"h "+ now.getMinutes()+"m "+ now.getSeconds()+"s");
+			//alert(now.getHours() +">"+date2.getHours()+"   "+now.getHours()+"<"+date.getHours());
+			
+		//sprawdzanie czy noc/dzień
+		//alert("day_start: " +day_start+"\nday_end: " + day_end + "\nnow_seconds" + now_seconds);
+		if(day_start>now_seconds && day_end<now_seconds){
+			day();
+		}
+		else
+		{
+			night();
+		}
+		
+		//ustawienia dnia
 		function day(){
-			//div.style.backgroundImage  = "-webkit-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%)";
 			background.setAttribute("id","content");
 			terrain.setAttribute("id","terrain");
 
-			var date = new Date(times * 1000);
-			var hours = date.getHours();
-			var minutes = "0" + date.getMinutes();
-			var seconds = "0" + date.getSeconds();
-			var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 			sunrise.innerHTML = formattedTime;
-
-			var date2 = new Date(timek * 1000);
-			var hours = date2.getHours();
-			var minutes = "0" + date2.getMinutes();
-			var seconds = "0" + date2.getSeconds();
-			var formattedTime2 = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 			sunset.innerHTML = formattedTime2;
+
+			//zmina pozycji słońca 
+			var minelo = now_seconds - day_start;
+			var podzielony = seconds_day/94;
+
+			for(var i=1; i<=94; i++){
+				if((day_start + minelo) > i*podzielony){
+					if(i>48){
+						topp = (3*i)-144;
+					}
+					else{
+						topp = 150-(3*i);
+					}
+
+					left = i;
+					time.style.top = topp+"%";
+					time.style.left = left+"%";
+
+					break;
+				}
+				
+			}
 		}
+		
+		//ustawienia nocy
 		function night(){
-			//div.style.backgroundImage  = "-webkit-linear-gradient(top, rgba(26,67,144,1) 0%, rgba(48,106,216,1) 100%)";
 			background.setAttribute("id","content2");
 			terrain.setAttribute("id","terrain2");
 
-			var date = new Date(times * 1000);
-			var hours = date.getHours();
-			var minutes = "0" + date.getMinutes();
-			var seconds = "0" + date.getSeconds();
-			var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 			sunset.innerHTML = formattedTime;
-
-			var date2 = new Date(timek * 1000);
-			var hours = date2.getHours();
-			var minutes = "0" + date2.getMinutes();
-			var seconds = "0" + date2.getSeconds();
-			var formattedTime2 = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 			sunrise.innerHTML = formattedTime2;
+
+			//zmina pozycji księżyca 
+			if(now_seconds<day_start){
+				//czas od pólnocy do wschodu
+				var podzielony = seconds_night/940;
+
+				for(var i=1; i<=940; i++){
+					if(84600+now_seconds < (i*podzielony)+day_end){
+						if(i>48){
+							topp = (0.3*i)-144;
+						}
+						else{
+							topp = 150-(0.3*i);
+						}
+
+						left = i;
+						time.style.top = topp+"%";
+						time.style.left = left+"%";
+
+						break;
+					}
+					
+				}
+			}
+			else
+			{
+				//czas od zmierzchu do północy
+				var minelo = now_seconds - day_end;
+				var podzielony = seconds_night/94;
+
+				for(var i=1; i<=94; i++){
+					if(now_seconds < (i*podzielony)+day_end){
+						if(i>48){
+							topp = (3*i)-144;
+						}
+						else{
+							topp = 150-(3*i);
+						}
+
+						left = i;
+						time.style.top = topp+"%";
+						time.style.left = left+"%";
+
+						break;
+					}
+					
+				}
+			}
 		}
 
 	</script>
