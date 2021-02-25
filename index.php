@@ -3,7 +3,7 @@
 	$apiKey = "5bf5d70f6b391fe9cb0c6febc330aa36";
 	$cityId = "Krosno";
 	if($_GET['city']==null){
-		header("location: getcity.php");
+		//header("location: getcity.php");
 	}
 	$city=$_GET['city'];
 	$language = "pl";
@@ -215,7 +215,7 @@
 			
 		//sprawdzanie czy noc/dzień
 		//alert("day_start: " +day_start+"\nday_end: " + day_end + "\nnow_seconds" + now_seconds);
-		if(day_start>now_seconds && day_end<now_seconds){
+		if(day_start<now_seconds && day_end <now_seconds){
 			day();
 		}
 		else
@@ -258,7 +258,6 @@
 		function night(){
 			background.setAttribute("id","content2");
 			terrain.setAttribute("id","terrain2");
-
 			sunset.innerHTML = formattedTime;
 			sunrise.innerHTML = formattedTime2;
 
@@ -266,17 +265,17 @@
 			if(now_seconds<day_start){
 				//czas od pólnocy do wschodu
 				var podzielony = seconds_night/940;
-
+				//alert("OBL1: " + ((84600 - day_end) + now_seconds) + " OBL2: " + ((84600 - day_end) + day_start) + "PODZIELONY: " + podzielony);
 				for(var i=1; i<=940; i++){
-					if(84600+now_seconds < (i*podzielony)+day_end){
-						if(i>48){
+					if(((84600 - day_end) + now_seconds) < podzielony*i){//if(84600+now_seconds < (i*podzielony)+day_end)
+						if(i>480){
 							topp = (0.3*i)-144;
 						}
 						else{
 							topp = 150-(0.3*i);
 						}
 
-						left = i;
+						left = i/10;
 						time.style.top = topp+"%";
 						time.style.left = left+"%";
 
@@ -288,19 +287,18 @@
 			else
 			{
 				//czas od zmierzchu do północy
-				var minelo = now_seconds - day_end;
-				var podzielony = seconds_night/94;
+				var podzielony = seconds_night/940;
 
-				for(var i=1; i<=94; i++){
+				for(var i=1; i<=940; i++){
 					if(now_seconds < (i*podzielony)+day_end){
-						if(i>48){
+						if(i>480){
 							topp = (3*i)-144;
 						}
 						else{
 							topp = 150-(3*i);
 						}
 
-						left = i;
+						left = i/10;
 						time.style.top = topp+"%";
 						time.style.left = left+"%";
 
