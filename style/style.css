@@ -6,6 +6,10 @@
   padding:0;
 }
 
+body{
+  background-color: blue;
+}
+
 /* DZIEŃ */
 
 #content{
@@ -69,16 +73,10 @@ form{
   margin-top:200px;
   border-radius:20px;
   height: 40px;
-  opacity: .2;
+  opacity: 1;
+  z-index:3;
 }
 
-form:hover{
-  opacity: 1;
-}
-
-form:active{
-  opacity: 1;
-}
 
 input[type=text]{
 	border:0;
@@ -92,6 +90,7 @@ input[type=text]{
   line-height: 40px;
   border-radius: 20px;
   padding: 0 0 0 5px;
+  color:#fff;
 }
 
 input[type=text]:focus{
@@ -129,80 +128,25 @@ button[type=submit] i{
 }
 
 #temp_currently{
-  font-size: 45px;
-
+  font-size: 50px;
 }
 
-#temp_max_min{
+#temp_feels{
   font-size: 20px;
-
 }
 
 #description{
-  font-size: 25px;
-
+  font-size: 28px;
+  margin-bottom: 30px;
 }
 
-#visibility{
-  background-color: #fff;
+#data{
   border-radius: 5px;
-  color:#000;
+  color:#fff;
+  border:1px solid #fff;
+  text-align: center;
+  font-size:18px;
   margin-bottom: 15px;
-}
-
-#clouds{
-  background-color: #fff;
-  border-radius: 5px;
-  color:#000;
-}
-
-#wind_speed{
-  background-color: #fff;
-  border-radius: 5px;
-  color:#000;
-  margin-bottom: 15px;
-}
-
-#wind_deg{
-  background-color: #fff;
-  border-radius: 5px;
-  color:#000;
-}
-
-#deg{
-
-}
-
-#pressure{
-  background-color: #fff;
-  border-radius: 5px;
-  color:#000;
-  margin-bottom: 15px;
-}
-
-#humidity{
-  background-color: #fff;
-  border-radius: 5px;
-  color:#000;
-}
-
-#feels{
-  background-color: #fff;
-  border-radius: 5px;
-  color:#000;
-}
-
-#temp_min{
-  background-color: #fff;
-  border-radius: 5px;
-  color:#000;
-  margin-bottom: 15px;
-}
-
-#temp_max{
-  background-color: #fff;
-  border-radius: 5px;
-  color:#000;
 }
 
 .hill-left{
@@ -221,7 +165,7 @@ button[type=submit] i{
   right:0;
   width: 0;
   height: 0;
-  border-bottom: 250px solid green;
+  border-bottom: 250px solid rgb(2, 95, 2);
   border-left: 700px solid transparent;
 }
 
@@ -231,11 +175,10 @@ button[type=submit] i{
   width:100%;
   height: 80vh;
   margin:0;
+  font-family: 'Nunito';
   background: rgb(22,20,61);
   background: linear-gradient(180deg, rgba(22,20,61,1) 0%, rgba(32,37,121,1) 94%);
-  font-family: 'Nunito';
-  font-size: 400;
-}
+  }
 
 #terrain2{
   width:100%;
@@ -243,3 +186,25 @@ button[type=submit] i{
   background-color: rgba(32,37,121,1);
 }
 
+#position{
+  position: relative;
+  z-index:2;
+}
+
+#stars{
+  position:absolute;
+  width:100%;
+  min-height: 80vh;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.7) 40%, transparent 40%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 40%, transparent 40%),radial-gradient(circle, rgba(255, 255, 255, 0.7) 40%, transparent 30%),radial-gradient(circle, rgba(255, 255, 255, 0.7) 40%, transparent 30%),radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%);
+  background-size: 4px 4px,3px 3px, 3px 3px, 4px 4px, 4px 4px, 3px 3px, 5px 5px, 3px 3px, 6px 6px, 4px 4px, 5px 5px, 4px 4px, 6px 6px, 3px 3px, 5px 5px, 4px 4px, 3px 3px, 6px 6px, 5px 5px, 4px 4px, 5px 5px, 6px 6px;
+  background-position: 75% 54%, 5% 44%, 76% 10%, 50% 5%, 20% 10%, 5% 20%, 10% 75%, 22% 35%, 30% 30%, 40% 50%, 45% 20%, 65% 20%, 85% 30%, 98% 90%, 20% 80%, 50% 80%, 75% 80%, 89% 75%, 90% 95%, 60% 70%, 65% 40%, 90% 20%;
+  background-repeat: no-repeat;
+  animation: twinkle ease-in 0.4s infinite;
+  z-index:1;
+}
+
+@keyframes twinkle {
+  to {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%),  radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, #fff 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, #fff 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, #fff 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, #fff 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, #fff 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, #fff 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, #fff 20%, transparent 30%), radial-gradient(circle, #fff 20%, transparent 30%);
+  }
+}

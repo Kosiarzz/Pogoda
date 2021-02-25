@@ -7,7 +7,7 @@
 	}
 	$city=$_GET['city'];
 	$language = "pl";
-	$img = 
+	$img = "";
 	$ApiUrl = "http://api.openweathermap.org/data/2.5/weather?q=" . $city . "&lang=". $language ."&units=metric&APPID=" . $apiKey;
 	
 	$ch = curl_init();
@@ -62,6 +62,7 @@
 		<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="shortcut icon" href=<?php echo "img/".$img.".png";?> type="image/x-icon">
 
 		<meta name="description" content="Sprawdź pogodę w dowolnej miejscowości na świecie.">
 		<meta name="keywords" content="pogoda, temperatura">
@@ -73,56 +74,59 @@
 	</head>
 	<body>
 		<div id="content">
-			<div id="timezone">
-				<img src=<?php echo "img/".$img.".png";?> alt="pogoda">
-				<div id="ddd">
-					<input type="button" value="day" onClick="day();">
-					<input type="button" value="night" onClick="night();">
+			<div id="stars"></div>
+			<div id="position">
+				<div id="timezone">
+					<img src=<?php echo "img/".$img.".png";?> alt="pogoda">
+					<div id="ddd">
+						<input type="button" value="day" onClick="day();">
+						<input type="button" value="night" onClick="night();">
+					</div>
+					<div id="sunrise"> 00:00:00 </div>
+					<div id="sunset">  00:00:00 </div>
 				</div>
-				<div id="sunrise"> 00:00:00 </div>
-				<div id="sunset">  00:00:00 </div>
-			</div>
-			<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<form method="get">
-						<input type="text" placeholder="Podaj miejscowość" name="city" id="name_city">
-						<button type="submit"><i class="fas fa-search"></i></button>
-					</form>
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-12">
+							<form method="get">
+								<input type="text" placeholder="Podaj miejscowość" name="city" id="name_city">
+								<button type="submit"><i class="fas fa-search"></i></button>
+							</form>
+						</div>
+					</div>
+					<div class="row justify-content-center">
+						<div id="country" class="col-lg-12">
+							<?php echo $data->name; ?>,
+							<?php echo $data->sys->country; ?>
+							<?php echo "<img src='https://www.countryflags.io/".$data->sys->country."/flat/64.png' alt='country'>"; ?>
+						</div>
+					</div>
+					<div class="row justify-content-center weather">
+						<div id="temp" class="col-lg-12">
+							<div id="temp_currently"><?php echo number_format($data->main->temp,1,'.',''); ?> °C</div>
+							<div id="temp_feels">Odczuwalna: <?php echo number_format($data->main->feels_like,1,'.',''); ?> °C</div>
+							<div id="description"><?php echo ucwords($data->weather[0]->description); ?></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-3">
+							<div id="data">Zachmurzenie <br><?php echo $data->clouds->all; ?> %</div>
+							<div id="data">Widoczność<br> <?php echo number_format($data->visibility /1000,1,'.',''); ?> km</div>
+						</div>
+						<div class="col-lg-3">
+							<div id="data">Prędkość wiatru <br><?php echo number_format($data->wind->speed * 3600 /1000,2,'.',''); ?> km/h</div>
+							<div id="data"><div id="deg"></div><i id="arrow" class="fas fa-arrow-up"></i></div>
+						</div>
+						<div class="col-lg-3">
+							<div id="data">Ciśnienie <br><?php echo $data->main->pressure; ?> hPa</div>
+							<div id="data">Wilgotność <br><?php echo $data->main->humidity; ?> %</div>
+						</div>
+						<div class="col-lg-3">
+						<div id="data">Temperatura minimalna<br> <?php echo ceil($data->main->temp_min); ?> °C</div>
+						<div id="data">Temperatura maksymalna<br> <?php echo ceil($data->main->temp_max); ?> °C</div>
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="row justify-content-center">
-				<div id="country" class="col-lg-12">
-					<?php echo $data->name; ?>,
-					<?php echo $data->sys->country; ?>
-					<?php echo "<img src='https://www.countryflags.io/".$data->sys->country."/flat/64.png' alt='country'>"; ?>
-				</div>
-			</div>
-			<div class="row justify-content-center weather">
-				<div id="temp" class="col-lg-12">
-					<div id="temp_currently"><?php echo $data->main->temp; ?> °C</div>
-					<div id="temp_max_min">Odczuwalna: <?php echo $data->main->feels_like; ?> °C</div>
-					<div id="description"><?php echo ucwords($data->weather[0]->description); ?></div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-3">
-					<div id="visibility">Widoczność: <?php echo $data->visibility; ?> m</div>
-					<div id="clouds">Zachmurzenie: <?php echo $data->clouds->all; ?> %</div>
-				</div>
-				<div class="col-lg-3">
-					<div id="wind_speed">Prędkość wiatru: <?php echo $data->wind->speed; ?> m/s</div>
-					<div id="wind_deg"><div id="deg"></div><i id="arrow" class="fas fa-arrow-up"></i></div>
-				</div>
-				<div class="col-lg-3">
-					<div id="pressure">Ciśnienie: <?php echo $data->main->pressure; ?>hPa</div>
-					<div id="humidity">Wilgotność: <?php echo $data->main->humidity; ?> %</div>
-				</div>
-				<div class="col-lg-3">
-				<div id="temp_min">Min: <?php echo ceil($data->main->temp_min); ?> °C</div>
-				<div id="temp_max">Max: <?php echo ceil($data->main->temp_max); ?> °C</div>
-				</div>
-			</div>
 			</div>
 		</div>
 		<div id="terrain">
@@ -140,6 +144,7 @@
 		var time = document.querySelector("#timezone img");	
 		var sunrise = document.getElementById("sunrise");
 		var sunset = document.getElementById("sunset");
+		var stars = document.getElementById("stars");
 
 		var times = <?php echo $data->sys->sunrise?>; //czas wchodu słońca
 		var timek = <?php echo $data->sys->sunset?>; //czas zachodu słońca
@@ -181,7 +186,7 @@
 				direction = "NNW";
 			}
 			arrow.style.transform = "rotate("+degg+"deg)";
-			return "Kierunek wiatru: "+direction;
+			return "Kierunek wiatru "+direction;
 		}
 		wind.innerHTML = deg(<?php echo $data->wind->deg; ?>);
 
@@ -215,7 +220,7 @@
 			
 		//sprawdzanie czy noc/dzień
 		//alert("day_start: " +day_start+"\nday_end: " + day_end + "\nnow_seconds" + now_seconds);
-		if(day_start<now_seconds && day_end <now_seconds){
+		if(day_start<now_seconds && day_end >now_seconds){
 			day();
 		}
 		else
@@ -230,21 +235,20 @@
 
 			sunrise.innerHTML = formattedTime;
 			sunset.innerHTML = formattedTime2;
+			stars.style.display = "none";
 
 			//zmina pozycji słońca 
-			var minelo = now_seconds - day_start;
-			var podzielony = seconds_day/94;
-
-			for(var i=1; i<=94; i++){
-				if((day_start + minelo) > i*podzielony){
-					if(i>48){
-						topp = (3*i)-144;
+			var podzielony = seconds_day/940;
+			for(var i=1; i<=940; i++){
+				if(now_seconds < day_start+i*podzielony){
+					if(i>480){
+						topp = (0.3*i)-144;
 					}
 					else{
-						topp = 150-(3*i);
+						topp = 150-(0.3*i);
 					}
 
-					left = i;
+					left = i/10;
 					time.style.top = topp+"%";
 					time.style.left = left+"%";
 
@@ -260,7 +264,7 @@
 			terrain.setAttribute("id","terrain2");
 			sunset.innerHTML = formattedTime;
 			sunrise.innerHTML = formattedTime2;
-
+			stars.style.display = "";
 			//zmina pozycji księżyca 
 			if(now_seconds<day_start){
 				//czas od pólnocy do wschodu
@@ -292,10 +296,10 @@
 				for(var i=1; i<=940; i++){
 					if(now_seconds < (i*podzielony)+day_end){
 						if(i>480){
-							topp = (3*i)-144;
+							topp = (0.3*i)-144;
 						}
 						else{
-							topp = 150-(3*i);
+							topp = 150-(0.3*i);
 						}
 
 						left = i/10;
