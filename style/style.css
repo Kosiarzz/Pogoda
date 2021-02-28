@@ -64,7 +64,20 @@ body{
   background-color: rgba(48,106,216,1);
 }
 
-form{
+#form_day{
+  background-color: #2358b9;
+  border-radius: 15px;
+  width: 305px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top:200px;
+  border-radius:20px;
+  height: 40px;
+  opacity: 1;
+  z-index:3;
+}
+
+#form_night{
   background-color: #12316b;
   border-radius: 15px;
   width: 305px;
@@ -77,8 +90,44 @@ form{
   z-index:3;
 }
 
+#name_city_day{
+	border:0;
+	font-size:18px;
+	box-sizing:border-box;
+  height: 30px;
+  width: 250px;
+	outline:none;
+  background-color: #2358b9;
+  margin-left: 10px;
+  line-height: 40px;
+  border-radius: 20px;
+  padding: 0 0 0 5px;
+  color:#fff;
+}
 
-input[type=text]{
+#name_city_day::placeholder {
+  color: #fff;
+  opacity: .8;
+}
+
+input[type=text]:focus{
+	border:0;
+}
+
+#submit_button_day{
+  border:0;
+  background-color: #2358b9;
+  margin-left: 5px;
+}
+
+#submit_button_day i{
+  font-size: 20px;
+  line-height: 40px;
+  color:#fff;
+  opacity:.8;
+}
+
+#name_city_night{
 	border:0;
 	font-size:18px;
 	box-sizing:border-box;
@@ -93,20 +142,19 @@ input[type=text]{
   color:#fff;
 }
 
-input[type=text]:focus{
-	border:0;
-}
-
-button[type=submit]{
+#submit_button_night{
   border:0;
   background-color: #12316b;
   margin-left: 5px;
 }
 
-button[type=submit] i{
+#submit_button_night i{
   font-size: 20px;
   line-height: 40px;
+  color:#000;
+  opacity:.8;
 }
+
 
 #country{
   text-align: center;
@@ -149,7 +197,7 @@ button[type=submit] i{
   margin-bottom: 15px;
 }
 
-.hill-left{
+.hill_left{
   position:absolute;
   bottom:0;
   left:0;
@@ -159,7 +207,7 @@ button[type=submit] i{
   border-right: 1400px solid transparent;
 }
 
-.hill-right{
+.hill_right{
   position:absolute;
   bottom:0;
   right:0;
@@ -168,6 +216,22 @@ button[type=submit] i{
   border-bottom: 250px solid rgb(2, 95, 2);
   border-left: 700px solid transparent;
 }
+
+.hill_center{
+  position:absolute;
+  bottom:0;
+  left:35%;
+  width: 0;
+  height: 0;
+  height: 200px;
+  width: 1000px;
+  background: rgb(1, 73, 1);
+  opacity:.8;
+  border-top-left-radius: 1000px;
+  border-top-right-radius: 1000px;
+}
+
+
 
 /* NOC */
 
@@ -207,4 +271,21 @@ button[type=submit] i{
   to {
     background-image: radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%),  radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, #fff 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, #fff 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, #fff 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, #fff 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, #fff 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, #fff 20%, transparent 30%), radial-gradient(circle, rgba(255, 255, 255, 0.7) 20%, transparent 30%), radial-gradient(circle, #fff 20%, transparent 30%), radial-gradient(circle, #fff 20%, transparent 30%);
   }
+}
+
+
+/**ERROR*/
+.error_image{
+  position:absolute;
+  top:5%;
+  right:15%;
+}
+
+.error_image img{
+  width:150px;
+  height: 150px;
+}
+
+.text_error{
+  text-align: center;
 }

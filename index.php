@@ -1,58 +1,47 @@
 <?php
 	//https://api.openweathermap.org/data/2.5/weather?q=Puławy,pl&lang=pl&units=metric&appid=5bf5d70f6b391fe9cb0c6febc330aa36
-	$apiKey = "5bf5d70f6b391fe9cb0c6febc330aa36";
-	$cityId = "Krosno";
-	if($_GET['city']==null){
-		//header("location: getcity.php");
-	}
-	$city=$_GET['city'];
-	$language = "pl";
-	$img = "";
-	$ApiUrl = "http://api.openweathermap.org/data/2.5/weather?q=" . $city . "&lang=". $language ."&units=metric&APPID=" . $apiKey;
-	
-	$ch = curl_init();
+	$error = false; //czy wysłany input jest pusty
+	$error_name = false; //czy podane miasto istnieje
 
-	curl_setopt($ch, CURLOPT_HEADER, 0);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_URL, $ApiUrl);
-	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-	curl_setopt($ch, CURLOPT_VERBOSE, 0);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-	$response = curl_exec($ch);
-
-	curl_close($ch);
-	$data = json_decode($response);
-
-	if($data->cod == 404){
-		header("location: error.php");
-	}
-	else
+	if(isset($_GET['city']) && $_GET['city'] != null)
 	{
-		//#echo ucwords($data->weather[0]->description); //pierwsza duża litera
-		//#$data->weather[0]->icon;
-		//#echo $data->main->temp_max;
-		//#echo $data->main->temp_min;
-		//#echo $data->main->temp;
-		//echo $data->main->feels_like; odczuwalna temp
-		//echo $data->main->pressure; cisnienie
-		//echo $data->main->humidity; wilgotnosc
-		//echo $data->wind->speed; wiatr predkosc
-		//echo $data->wind->deg;   wiatr kierunek
-		//echo $data->clouds->all; zachmurzenie
-		//echo $data->visibility; widocznosc
-		//#echo $data->sys->country;
-		//#echo $data->sys->sunrise;
-		//#echo $data->sys->sunset;
-		//#echo $data->name;
-		//$currentTime = time();
+		$city = $_GET['city'];
+		
+		$apiKey = "5bf5d70f6b391fe9cb0c6febc330aa36";
+		$language = "pl";
+		$ApiUrl = "http://api.openweathermap.org/data/2.5/weather?q=" . $city . "&lang=". $language ."&units=metric&APPID=" . $apiKey;
 
-		//wybór ikony zależny od dnia/nocy
-		if(str_ends_with($data->weather[0]->icon , "n")){
-			$img = "01n";
-		}else
-		{
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_URL, $ApiUrl);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($ch, CURLOPT_VERBOSE, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+		$response = curl_exec($ch);
+		curl_close($ch);
+		$data = json_decode($response);
+
+		if($data->cod == 404){
 			$img = "01d";
+			$error_name = true;
+			$error = true;
 		}
+		else
+		{
+			//wybór ikony zależny od dnia/nocy
+			if(str_ends_with($data->weather[0]->icon , "n")){
+				$img = "01n";
+			}else
+			{
+				$img = "01d";
+			}
+		}
+	}
+	else{
+		$img = "01d";
+		$error = true;
 	}
 
 ?>
@@ -74,6 +63,7 @@
 	</head>
 	<body>
 		<div id="content">
+		<?php if($error == false){?>
 			<div id="stars"></div>
 			<div id="position">
 				<div id="timezone">
@@ -88,9 +78,9 @@
 				<div class="container">
 					<div class="row">
 						<div class="col-lg-12">
-							<form method="get">
-								<input type="text" placeholder="Podaj miejscowość" name="city" id="name_city">
-								<button type="submit"><i class="fas fa-search"></i></button>
+							<form id="form_day" method="get">
+								<input type="text" placeholder="Podaj miejscowość" name="city" id="name_city_day">
+								<button type="submit" id="submit_button_day"><i class="fas fa-search"></i></button>
 							</form>
 						</div>
 					</div>
@@ -127,11 +117,53 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div>	
+			<?php }else if($error_name == true){?>
+				<div class="error_image">
+					<img src=<?php echo "img/".$img.".png";?> alt="pogoda">
+				</div>
+				<div class="container">
+				error_name
+					<div class="row">
+						<div class="col-lg-12">
+							<form id="form_day" method="get">
+								<input type="text" placeholder="Podaj miejscowość" name="city" id="name_city_day">
+								<button type="submit" id="submit_button_day"><i class="fas fa-search"></i></button>
+							</form>
+						</div>
+					</div>
+					<div class="row justify-content-center weather">
+						<div class="col-lg-12 text_error">
+							Żądana miejscowość nie istnieje
+						</div>
+					</div>
+				</div>
+			<?php }else{?>
+				error
+				<div class="error_image">
+					<img src=<?php echo "img/".$img.".png";?> alt="pogoda">
+				</div>
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-12">
+							<form id="form_day" method="get">
+								<input type="text" placeholder="Podaj miejscowość" name="city" id="name_city_day">
+								<button type="submit" id="submit_button_day"><i class="fas fa-search"></i></button>
+							</form>
+						</div>
+					</div>
+					<div class="row justify-content-center weather">
+						<div class="col-lg-12 text_error">
+							Aby sprawdzić aktualną pogodę wpisz w wyszukiwarce dowolną nazwę
+						</div>
+					</div>
+				</div>
+			<?php }?>
 		</div>
 		<div id="terrain">
-			<div class="hill-right"></div>
-    		<div class="hill-left"></div>
+			<div class="hill_center"></div>
+			<div class="hill_right"></div>
+    		<div class="hill_left"></div>
 		</div>
 		
 	</body>
@@ -142,9 +174,13 @@
 		var wind =  document.getElementById("deg"); //wind direction
 		var arrow =  document.getElementById("arrow"); //wind arrow	
 		var time = document.querySelector("#timezone img");	
+		var form = document.getElementById("form_day");
+		var form_city = document.getElementById("name_city_day");
+		var form_button = document.getElementById("submit_button_day");
 		var sunrise = document.getElementById("sunrise");
 		var sunset = document.getElementById("sunset");
 		var stars = document.getElementById("stars");
+
 
 		var times = <?php echo $data->sys->sunrise?>; //czas wchodu słońca
 		var timek = <?php echo $data->sys->sunset?>; //czas zachodu słońca
@@ -186,7 +222,7 @@
 				direction = "NNW";
 			}
 			arrow.style.transform = "rotate("+degg+"deg)";
-			return "Kierunek wiatru "+direction;
+			return "Kierunek wiatru ("+direction+")";
 		}
 		wind.innerHTML = deg(<?php echo $data->wind->deg; ?>);
 
@@ -232,10 +268,14 @@
 		function day(){
 			background.setAttribute("id","content");
 			terrain.setAttribute("id","terrain");
+			form.setAttribute("id","form_day");
+			form_city.setAttribute("id","name_city_day");
+			form_button.setAttribute("id","submit_button_day");
 
 			sunrise.innerHTML = formattedTime;
 			sunset.innerHTML = formattedTime2;
 			stars.style.display = "none";
+			
 
 			//zmina pozycji słońca 
 			var podzielony = seconds_day/940;
@@ -262,9 +302,14 @@
 		function night(){
 			background.setAttribute("id","content2");
 			terrain.setAttribute("id","terrain2");
+			form.setAttribute("id","form_night");
+			form_city.setAttribute("id","name_city_night");
+			form_button.setAttribute("id","submit_button_night");
+
 			sunset.innerHTML = formattedTime;
 			sunrise.innerHTML = formattedTime2;
 			stars.style.display = "";
+
 			//zmina pozycji księżyca 
 			if(now_seconds<day_start){
 				//czas od pólnocy do wschodu
